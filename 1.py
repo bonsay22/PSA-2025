@@ -8,7 +8,7 @@ class LP():
         self._duration = duration
 
     def to_string(self):
-        out = "| {0:^20} | {1:^4} | {2:^20} | {3:^3} |".format(self._name, self._year, self._artist, self._duration)
+        out = "| {0:^20} | {1:^4} | {2:^20} | {3:^8} |".format(self._name, self._year, self._artist, self._duration)
         return out
     
 class Library():
@@ -21,6 +21,9 @@ class Library():
     def delete_LP(self, lp):
         self._library.remove(lp)
         
+    def delete_LP(self,index):
+        self.library.pop(index)
+        
     def clean_library(self):
         self._library.clear()
             
@@ -31,11 +34,13 @@ class Library():
         
             
     def to_string(self):
-        out =  "|----------------------------------|\n"
-        out += "| Title | Year | Artist | Duration |\n"
-        out += "|----------------------------------|\n"
+        out =  "|{}|\n".format("-"*68)
+        out += "| ID | {:^20} | Year | {:^20} | Duration |\n".format("Title", "Artist")
+        out += "|{}|\n".format("-"*68)
+        i = 0
         for lp in self._library:
-            out += lp.to_string() + "\n"
+            out += "| {} {} \n".format(i,lp.to_string())
+            i += 1
         return out
     
 def main():
@@ -62,7 +67,14 @@ def main():
             library.insert_LP(lp)
             continue
         if choice[0] == "2":
-            # TODO
+            print(library.to_string())
+            index = input("Enter index LP to delete: ")
+            try:
+                index = int(index_str)
+                library.delete_LP_index(index)
+            except ValueError:
+                print("ERROR: WRONG index selected. ")
+                
             continue
         if choice[0] == "3":
             library.clean_library()
